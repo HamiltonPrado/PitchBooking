@@ -33,7 +33,7 @@ Aplicação web para a gestão integral de um clube desportivo. Permite que atle
    git clone https://github.com/HamiltonPrado/PitchBooking.git
    ```
 2. Iniciar o MAMP (Apache + MySQL).
-3. Criar a base de dados importando o script `database/clube_db.sql` no MySQL Workbench ou phpMyAdmin.
+3. Criar a base de dados importando o script `database/PitchBooking` no MySQL Workbench ou phpMyAdmin.
 4. Confirmar as credenciais em `backend/db.php` (host, porta, user, password).
 5. Aceder no browser a `http://localhost/PitchBooking`.
 
