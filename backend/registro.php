@@ -15,3 +15,5 @@ $resultado = mysqli_stmt_get_result($stmt);
 if (mysqli_fetch_assoc($resultado)) {
     die('Este email já está registado.');
 }
+
+$hash = password_hash($password, PASSWORD_DEFAULT);
