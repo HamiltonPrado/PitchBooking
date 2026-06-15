@@ -17,3 +17,11 @@ if (mysqli_fetch_assoc($resultado)) {
 }
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
+
+$stmt = mysqli_prepare($ligacao,
+    "INSERT INTO atleta (nome, email, password, tipo_doc, num_doc, nif) VALUES (?, ?, ?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "ssssss", $nome, $email, $hash, $tipo_doc, $num_doc, $nif);
+mysqli_stmt_execute($stmt);
+
+echo 'Conta criada com sucesso!';
+
