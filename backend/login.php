@@ -11,12 +11,18 @@ mysqli_stmt_execute($stmt);
 $resultado = mysqli_stmt_get_result($stmt);
 $atleta = mysqli_fetch_assoc($resultado);
 
-//verificar a password e criar a sessão//
+// verificar a password e redirecionar conforme o role
 if ($atleta && password_verify($password, $atleta['password'])) {
     $_SESSION['atleta_id'] = $atleta['id'];
     $_SESSION['nome'] = $atleta['nome'];
     $_SESSION['role'] = $atleta['role'];
-    echo 'Login com sucesso!';
+
+    if ($atleta['role'] == 'cliente') {
+        header('Location: ../frontend/userdashboard.html');
+    } else {
+        header('Location: ../frontend/backoffice.html');
+    }
+    exit;
 } else {
     echo 'Email ou password incorretos.';
 }
