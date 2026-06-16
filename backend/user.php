@@ -5,19 +5,14 @@ if (!isset($_SESSION['atleta_id'])) {
     exit;
 }
 require 'db.php';
+header('Content-Type: application/json');
 
 $atleta_id = $_SESSION['atleta_id'];
 
+// Vai buscar os dados do atleta e o estado dos documentos
 $stmt = mysqli_prepare($ligacao,
-    "SELECT nome, email, docs_verificados FROM atleta WHERE id = ?");
+    "SELECT nome, email, tipo_doc, num_doc, nif, docs_verificados FROM atleta WHERE id = ?");
 mysqli_stmt_bind_param($stmt, "i", $atleta_id);
 mysqli_stmt_execute($stmt);
 $resultado = mysqli_stmt_get_result($stmt);
-$atleta = mysqli_fetch_assoc($resultado);
-
-// Verifica se os documentos foram validados pelo backoffice
-if ($atleta['docs_verificados'] == 0) {
-    echo 'Os seus documentos ainda não foram verificados.';
-} else {
-    echo 'Documentos verificados.';
-}
+$dados = mysqli_fetch_assoc($resultado);
