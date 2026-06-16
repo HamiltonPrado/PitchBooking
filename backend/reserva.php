@@ -39,3 +39,13 @@ if ($usa_luz) {
     $valor_total = $valor_total + $campo['custo_luz'];
 }
 $valor_total = $valor_total + ($campo['custo_material'] * $qtd_material);
+
+// Insere a reserva na base de dados
+$stmt = mysqli_prepare($ligacao,
+    "INSERT INTO reserva (atleta_id, campo_id, data_jogo, hora_inicio, hora_fim, usa_luz, qtd_material, valor_total)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "iisssiid",
+    $atleta_id, $campo_id, $data_jogo, $hora_inicio, $hora_fim, $usa_luz, $qtd_material, $valor_total);
+mysqli_stmt_execute($stmt);
+
+echo 'Reserva criada com sucesso!';
