@@ -10,6 +10,27 @@
     <h1>Fazer Reserva</h1>
     <p>Tipo de campo: <strong><span id="tipo-campo"></span></strong></p>
 
+    <form action="../backend/reserva.php" method="post">
+        <input type="hidden" name="tipo_campo" id="input-tipo">
+
+        <label>Data do jogo:</label><br>
+        <input type="date" name="data_jogo" required><br><br>
+
+        <label>Hora de início:</label><br>
+        <input type="time" name="hora_inicio" required><br><br>
+
+        <label>Hora de fim:</label><br>
+        <input type="time" name="hora_fim" required><br><br>
+
+        <label>
+            <input type="checkbox" name="usa_luz"> Iluminação noturna
+        </label><br><br>
+
+        <label>Quantidade de material (raquetes/bolas):</label><br>
+        <input type="number" name="qtd_material" value="0" min="0"><br><br>
+
+        <button type="submit">Confirmar Reserva</button>
+    </form>
 </body>
 
 </html>
