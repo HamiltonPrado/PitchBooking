@@ -37,15 +37,6 @@ Aplicação web para a gestão integral de um clube desportivo. Permite que atle
 4. Confirmar as credenciais em `backend/db.php` (host, porta, user, password).
 5. Aceder no browser a `http://localhost/PitchBooking`.
 
-## Estrutura do Projeto
-
-```
-PitchBooking/
-├── backend/        Ficheiros PHP (ligação, lógica, API)
-├── css/            Folhas de estilo
-└── index.html      Página inicial
-```
-
 ## Autor
 
 Francisco Baptista — Engenharia Informática, 2º ano
