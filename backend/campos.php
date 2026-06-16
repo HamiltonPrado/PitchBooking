@@ -8,3 +8,10 @@ $resultado = mysqli_query($ligacao,
      WHERE estado = 'disponivel'
      GROUP BY tipo_campo");
 
+// Mostra cada tipo de campo
+while ($campo = mysqli_fetch_assoc($resultado)) {
+    echo '<h3>' . $campo['tipo_campo'] . '</h3>';
+    echo 'Preço base: ' . $campo['preco'] . '€<br>';
+    echo 'Suplemento luz: ' . $campo['luz'] . '€<br>';
+    echo 'Aluguer material: ' . $campo['material'] . '€<br><hr>';
+}
