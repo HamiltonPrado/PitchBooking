@@ -25,3 +25,17 @@ if (mysqli_fetch_assoc($resultado)) {
     die('Este campo já está reservado para essa data e hora.');
 }
 
+// Vai buscar os precos do campo escolhido
+$stmt = mysqli_prepare($ligacao,
+    "SELECT preco_base, custo_luz, custo_material FROM campo WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $campo_id);
+mysqli_stmt_execute($stmt);
+$resultado = mysqli_stmt_get_result($stmt);
+$campo = mysqli_fetch_assoc($resultado);
+
+// Calcula o total: base + luz (se ativada) + material (por unidade)
+$valor_total = $campo['preco_base'];
+if ($usa_luz) {
+    $valor_total = $valor_total + $campo['custo_luz'];
+}
+$valor_total = $valor_total + ($campo['custo_material'] * $qtd_material);
