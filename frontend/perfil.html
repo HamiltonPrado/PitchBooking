@@ -15,6 +15,41 @@
     <h2>As Minhas Reservas</h2>
     <div id="lista-reservas"></div>
 
+    <script>
+        fetch('../backend/user.php')
+            .then(res => res.json())
+            .then(info => {
+                // Mostra os dados pessoais
+                const d = info.dados;
+                document.getElementById('dados-pessoais').innerHTML = `
+                    <p>Nome: ${d.nome}</p>
+                    <p>Email: ${d.email}</p>
+                    <p>Documento: ${d.tipo_doc} - ${d.num_doc}</p>
+                    <p>NIF: ${d.nif ?? 'Não fornecido'}</p>
+                    <p>Documentos verificados: ${d.docs_verificados == 1 ? 'Sim' : 'Não'}</p>`;
+
+                // Mostra as reservas
+                const div = document.getElementById('lista-reservas');
+                if (info.reservas.length === 0) {
+                    div.innerHTML = '<p>Ainda não tem reservas.</p>';
+                } else {
+                    info.reservas.forEach(r => {
+                        div.innerHTML += `
+                            <div>
+                                <strong>${r.tipo_campo}</strong> (${r.identificador})<br>
+                                ${r.data_jogo} | ${r.hora_inicio} - ${r.hora_fim}<br>
+                                Total: ${r.valor_total}€ | Estado: ${r.estado} |
+                                Check-in: ${r.check_in == 1 ? 'Sim' : 'Não'}
+                            </div>
+                            <hr>`;
+                    });
+                }
+            })
+            .catch(err => {
+                document.getElementById('dados-pessoais').innerHTML = 'Erro ao carregar o perfil.';
+            });
+    </script>
+
 </body>
 
 </html>
