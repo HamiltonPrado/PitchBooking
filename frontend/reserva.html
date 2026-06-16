@@ -31,6 +31,15 @@
 
         <button type="submit">Confirmar Reserva</button>
     </form>
+    <script>
+        // Lê o parâmetro "tipo" do URL 
+        const params = new URLSearchParams(window.location.search);
+        const tipo = params.get('tipo');
+
+        // Mostra o tipo ao utilizador e mete-o no campo escondido do formulário
+        document.getElementById('tipo-campo').textContent = tipo;
+        document.getElementById('input-tipo').value = tipo;
+    </script>
 </body>
 
 </html>
