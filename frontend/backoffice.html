@@ -60,7 +60,7 @@
                         div.innerHTML = '<p>Não há reservas.</p>';
                         return;
                     }
-                    let html = '<table border="1"><tr><th>Atleta</th><th>Campo</th><th>Data</th><th>Hora</th><th>Total</th><th>Estado</th><th>Check-in</th></tr>';
+                    let html = '<table border="1"><tr><th>Atleta</th><th>Campo</th><th>Data</th><th>Hora</th><th>Total</th><th>Estado</th><th>Check-in</th><th>Ações</th></tr>';
                     reservas.forEach(r => {
                         html += `<tr>
                             <td>${r.atleta}</td>
@@ -70,13 +70,41 @@
                             <td>${r.valor_total}€</td>
                             <td>${r.estado}</td>
                             <td>${r.check_in == 1 ? 'Sim' : 'Não'}</td>
+                            <td>
+                                <button onclick="cancelarReserva(${r.id})">Cancelar</button>
+                                <button onclick="fazerCheckin(${r.id})">Check-in</button>
+                            </td>
                         </tr>`;
                     });
                     html += '</table>';
                     div.innerHTML = html;
                 });
         }
+
+        function cancelarReserva(id) {
+            const dados = new FormData();
+            dados.append('acao', 'cancelar');
+            dados.append('reserva_id', id);
+            fetch('../backend/reserva.php', {
+                    method: 'POST',
+                    body: dados
+                })
+                .then(res => res.text())
+                .then(() => carregarReservas());
+        }
+
+        function fazerCheckin(id) {
+            const dados = new FormData();
+            dados.append('acao', 'checkin');
+            dados.append('reserva_id', id);
+            fetch('../backend/reserva.php', {
+                    method: 'POST',
+                    body: dados
+                })
+                .then(res => res.text())
+                .then(() => carregarReservas());
+        }
     </script>
 </body>
 
-</html>
+</html
