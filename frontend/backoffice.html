@@ -11,6 +11,8 @@
     <p>Perfil: <strong><span id="perfil"></span></strong></p>
 
     <div id="menu"></div>
+    <h2>Reservas do Clube</h2>
+    <div id="lista-reservas-bo"></div>
 
     <script>
         fetch('../backend/user.php')
@@ -41,10 +43,39 @@
                 }
 
                 menu.innerHTML = html;
+
+                // Carrega as reservas do clube
+                carregarReservas();
             })
             .catch(err => {
                 document.getElementById('menu').innerHTML = 'Erro ao carregar o backoffice.';
             });
+
+        function carregarReservas() {
+            fetch('../backend/reserva.php?acao=listar')
+                .then(res => res.json())
+                .then(reservas => {
+                    const div = document.getElementById('lista-reservas-bo');
+                    if (reservas.length === 0) {
+                        div.innerHTML = '<p>Não há reservas.</p>';
+                        return;
+                    }
+                    let html = '<table border="1"><tr><th>Atleta</th><th>Campo</th><th>Data</th><th>Hora</th><th>Total</th><th>Estado</th><th>Check-in</th></tr>';
+                    reservas.forEach(r => {
+                        html += `<tr>
+                            <td>${r.atleta}</td>
+                            <td>${r.tipo_campo} (${r.identificador})</td>
+                            <td>${r.data_jogo}</td>
+                            <td>${r.hora_inicio} - ${r.hora_fim}</td>
+                            <td>${r.valor_total}€</td>
+                            <td>${r.estado}</td>
+                            <td>${r.check_in == 1 ? 'Sim' : 'Não'}</td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    div.innerHTML = html;
+                });
+        }
     </script>
 </body>
 
