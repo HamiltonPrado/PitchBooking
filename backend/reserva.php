@@ -91,3 +91,52 @@ else if ($acao == 'listar') {
 
     echo json_encode($reservas);
 }
+
+
+else if ($acao == 'cancelar') {
+
+    // Só staff pode cancelar reservas pelo backoffice
+
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+
+        die('Sem permissão.');
+
+    }
+
+    $reserva_id = $_POST['reserva_id'];
+
+    $stmt = mysqli_prepare($ligacao,
+
+        "UPDATE reserva SET estado = 'cancelada' WHERE id = ?");
+
+    mysqli_stmt_bind_param($stmt, "i", $reserva_id);
+
+    mysqli_stmt_execute($stmt);
+
+    echo 'Reserva cancelada.';
+
+}
+
+else if ($acao == 'checkin') {
+
+    // Só staff pode fazer check-in
+
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+
+        die('Sem permissão.');
+
+    }
+
+    $reserva_id = $_POST['reserva_id'];
+
+    $stmt = mysqli_prepare($ligacao,
+
+        "UPDATE reserva SET check_in = 1 WHERE id = ?");
+
+    mysqli_stmt_bind_param($stmt, "i", $reserva_id);
+
+    mysqli_stmt_execute($stmt);
+
+    echo 'Check-in efetuado.';
+
+}
