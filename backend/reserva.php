@@ -64,3 +64,30 @@ mysqli_stmt_execute($stmt);
 
 echo 'Reserva criada com sucesso!'; 
 }
+
+else if ($acao == 'listar') {
+
+    header('Content-Type: application/json');
+
+    // Só staff (gestor ou rececionista) pode listar todas as reservas
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    // Vai buscar todas as reservas do clube, com atleta e campo
+    $resultado = mysqli_query($ligacao,
+        "SELECT r.id, a.nome AS atleta, c.tipo_campo, c.identificador,
+                r.data_jogo, r.hora_inicio, r.hora_fim, r.valor_total, r.estado, r.check_in
+         FROM reserva r
+         JOIN atleta a ON a.id = r.atleta_id
+         JOIN campo c ON c.id = r.campo_id
+         ORDER BY r.data_jogo DESC");
+
+    $reservas = [];
+    while ($linha = mysqli_fetch_assoc($resultado)) {
+        $reservas[] = $linha;
+    }
+
+    echo json_encode($reservas);
+}
