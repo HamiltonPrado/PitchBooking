@@ -12,6 +12,40 @@
 
     <div id="menu"></div>
 
+    <script>
+        fetch('../backend/user.php')
+            .then(res => res.json())
+            .then(info => {
+                const role = info.dados.role;
+                document.getElementById('perfil').textContent = role;
+
+                const menu = document.getElementById('menu');
+
+                // Funcionalidades comuns a gestor e rececionista
+                let html = `
+                    <h2>Operações</h2>
+                    <ul>
+                        <li><a href="#reservas">Gerir reservas</a></li>
+                        <li><a href="#pagamentos">Registar pagamentos</a></li>
+                        <li><a href="#atletas">Gerir atletas</a></li>
+                        <li><a href="#relatorios">Relatórios</a></li>
+                    </ul>`;
+
+                // Só o gestor vê a gestão de campos e preços
+                if (role === 'gestor') {
+                    html += `
+                        <h2>Apenas Gestor</h2>
+                        <ul>
+                            <li><a href="#campos">Gerir campos e preços</a></li>
+                        </ul>`;
+                }
+
+                menu.innerHTML = html;
+            })
+            .catch(err => {
+                document.getElementById('menu').innerHTML = 'Erro ao carregar o backoffice.';
+            });
+    </script>
 </body>
 
 </html>
