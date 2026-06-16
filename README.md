@@ -1,7 +1,5 @@
 # PitchBooking
 
-Web App de um sistema de reservas de campos desportivos de um clube de ténis e pádel de pequeno porte.
-
 ## Descrição
 
 Aplicação web para a gestão integral de um clube desportivo. Permite que atletas pesquisem e reservem tipos de campo, giram e consultem as suas reservas mediante autenticação, e que a equipa do clube (gestor e rececionista) administre campos, atletas, reservas, registe pagamentos simulados, efetue a confirmação de comparência (check-in) e extraia relatórios.
