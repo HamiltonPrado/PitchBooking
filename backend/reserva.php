@@ -5,6 +5,9 @@ if (!isset($_SESSION['atleta_id'])) {
     exit;
 }
 require 'db.php';
+$acao = $_POST['acao'] ?? $_GET['acao'] ?? 'criar';
+
+if ($acao == 'criar') {
 
 $atleta_id = $_SESSION['atleta_id'];
 $tipo_campo = $_POST['tipo_campo'];
@@ -59,4 +62,5 @@ mysqli_stmt_bind_param($stmt, "iisssiid",
     $atleta_id, $campo_id, $data_jogo, $hora_inicio, $hora_fim, $usa_luz, $qtd_material, $valor_total);
 mysqli_stmt_execute($stmt);
 
-echo 'Reserva criada com sucesso!';
+echo 'Reserva criada com sucesso!'; 
+}
