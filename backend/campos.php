@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+header('Content-Type: application/json');
 
 // Vai buscar os tipos de campo disponiveis e o preco
 $resultado = mysqli_query($ligacao,
@@ -8,10 +9,10 @@ $resultado = mysqli_query($ligacao,
      WHERE estado = 'disponivel'
      GROUP BY tipo_campo");
 
-// Mostra cada tipo de campo
+// Junta os campos num array
+$campos = [];
 while ($campo = mysqli_fetch_assoc($resultado)) {
-    echo '<h3>' . $campo['tipo_campo'] . '</h3>';
-    echo 'Preço base: ' . $campo['preco'] . '€<br>';
-    echo 'Suplemento luz: ' . $campo['luz'] . '€<br>';
-    echo 'Aluguer material: ' . $campo['material'] . '€<br><hr>';
+    $campos[] = $campo;
 }
+
+echo json_encode($campos);
