@@ -9,7 +9,26 @@
 <body>
     <h1>Campos Disponíveis</h1>
     <div id="lista-campos"></div>
-
+    <script>
+        fetch('../backend/campos.php')
+            .then(res => res.json())
+            .then(campos => {
+                const div = document.getElementById('lista-campos');
+                campos.forEach(campo => {
+                    div.innerHTML += `
+                        <div>
+                            <h3>${campo.tipo_campo}</h3>
+                            <p>Preço base: ${campo.preco}€</p>
+                            <p>Luz: ${campo.luz}€ | Material: ${campo.material}€</p>
+                            <a href="reserva.html?tipo=${campo.tipo_campo}">Reservar</a>
+                        </div>
+                        <hr>`;
+                });
+            })
+            .catch(err => {
+                document.getElementById('lista-campos').innerHTML = 'Erro ao carregar os campos.';
+            });
+    </script>
 </body>
 
 </html>
