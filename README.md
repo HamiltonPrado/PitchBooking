@@ -39,5 +39,5 @@ Aplicação web para a gestão integral de um clube desportivo. Permite que atle
 
 ## Autor
 
-Francisco Baptista — Engenharia Informática, 2º ano
-Universidade Europeia
+Francisco Baptista 
+
