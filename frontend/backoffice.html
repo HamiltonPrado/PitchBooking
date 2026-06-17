@@ -27,6 +27,8 @@
         <button onclick="registarPagamento()">Registar</button>
         <span id="pag-msg"></span>
     </div>
+    <h2>Gestão de Atletas</h2>
+    <div id="lista-atletas"></div>
 
     <script>
         fetch('../backend/user.php')
@@ -60,6 +62,8 @@
 
                 // Carrega as reservas do clube
                 carregarReservas();
+                carregarAtletas();
+
             })
             .catch(err => {
                 document.getElementById('menu').innerHTML = 'Erro ao carregar o backoffice.';
@@ -132,6 +136,55 @@
                 .then(msg => {
                     document.getElementById('pag-msg').textContent = msg;
                 });
+        }
+
+        function carregarAtletas() {
+            fetch('../backend/user.php?acao=listar_atletas')
+                .then(res => res.json())
+                .then(atletas => {
+                    const div = document.getElementById('lista-atletas');
+                    let html = '<table border="1"><tr><th>Nome</th><th>Email</th><th>Documento</th><th>Estado</th><th>Docs</th><th>Ações</th></tr>';
+                    atletas.forEach(a => {
+                        html += `<tr>
+                            <td>${a.nome}</td>
+                            <td>${a.email}</td>
+                            <td>${a.tipo_doc} - ${a.num_doc}</td>
+                            <td>${a.estado}</td>
+                            <td>${a.docs_verificados == 1 ? 'Sim' : 'Não'}</td>
+                            <td>
+                                <button onclick="verificarDocs(${a.id})">Verificar docs</button>
+                                <button onclick="alterarEstado(${a.id}, '${a.estado == 'ativo' ? 'inativo' : 'ativo'}')">${a.estado == 'ativo' ? 'Inativar' : 'Ativar'}</button>
+                            </td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    div.innerHTML = html;
+                });
+        }
+
+        function verificarDocs(id) {
+            const dados = new FormData();
+            dados.append('acao', 'verificar_docs');
+            dados.append('atleta_id', id);
+            fetch('../backend/user.php', {
+                    method: 'POST',
+                    body: dados
+                })
+                .then(res => res.json())
+                .then(() => carregarAtletas());
+        }
+
+        function alterarEstado(id, novoEstado) {
+            const dados = new FormData();
+            dados.append('acao', 'alterar_estado');
+            dados.append('atleta_id', id);
+            dados.append('estado', novoEstado);
+            fetch('../backend/user.php', {
+                    method: 'POST',
+                    body: dados
+                })
+                .then(res => res.json())
+                .then(() => carregarAtletas());
         }
     </script>
 </body>
