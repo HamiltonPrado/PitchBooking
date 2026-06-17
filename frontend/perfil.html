@@ -36,7 +36,7 @@
                     info.reservas.forEach(r => {
                         div.innerHTML += `
                             <div>
-                                <strong>${r.tipo_campo}</strong> (${r.identificador})<br>
+                                <strong>${formatarTipo(r.tipo_campo)}</strong> (${r.identificador})<br>
                                 ${r.data_jogo} | ${r.hora_inicio} - ${r.hora_fim}<br>
                                 Total: ${r.valor_total}€ | Estado: ${r.estado} |
                                 Check-in: ${r.check_in == 1 ? 'Sim' : 'Não'}
@@ -48,6 +48,10 @@
             .catch(err => {
                 document.getElementById('dados-pessoais').innerHTML = 'Erro ao carregar o perfil.';
             });
+
+        function formatarTipo(t) {
+            return t.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
     </script>
 
 </body>

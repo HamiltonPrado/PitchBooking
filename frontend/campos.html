@@ -17,7 +17,7 @@
                 campos.forEach(campo => {
                     div.innerHTML += `
                         <div>
-                            <h3>${campo.tipo_campo}</h3>
+                               <h3>${formatarTipo(campo.tipo_campo)}</h3>
                             <p>Preço base: ${campo.preco}€</p>
                             <p>Luz: ${campo.luz}€ | Material: ${campo.material}€</p>
                             <a href="reserva.html?tipo=${campo.tipo_campo}">Reservar</a>
@@ -28,6 +28,10 @@
             .catch(err => {
                 document.getElementById('lista-campos').innerHTML = 'Erro ao carregar os campos.';
             });
+
+        function formatarTipo(t) {
+            return t.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
     </script>
 </body>
 
