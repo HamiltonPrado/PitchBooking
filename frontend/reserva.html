@@ -4,46 +4,67 @@
 <head>
     <meta charset="utf-8">
     <title>Fazer Reserva - PitchBooking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
-    <h1>Fazer Reserva</h1>
-    <nav>
-        <a href="campos.html">Voltar aos campos</a> |
-        <a href="../backend/logout.php">Terminar sessão</a>
-    </nav>
-    <p>Tipo de campo: <strong><span id="tipo-campo"></span></strong></p>
+    <div class="container my-5">
+        <h1>Fazer Reserva</h1>
+        <nav class="mb-3">
+            <a href="campos.html">Voltar aos campos</a> |
+            <a href="../backend/logout.php">Terminar sessão</a>
+        </nav>
 
-    <form action="../backend/reserva.php" method="post">
-        <input type="hidden" name="tipo_campo" id="input-tipo">
+        <p>Tipo de campo: <strong><span id="tipo-campo"></span></strong></p>
 
-        <label>Data do jogo:</label><br>
-        <input type="date" name="data_jogo" required><br><br>
+        <form action="../backend/reserva.php" method="post">
+            <input type="hidden" name="tipo_campo" id="input-tipo">
 
-        <label>Hora de início:</label><br>
-        <input type="time" name="hora_inicio" required><br><br>
+            <div class="mb-3">
+                <label class="form-label">Data do jogo:</label>
+                <input type="date" name="data_jogo" class="form-control" required>
+            </div>
 
-        <label>Hora de fim:</label><br>
-        <input type="time" name="hora_fim" required><br><br>
+            <div class="mb-3">
+                <label class="form-label">Hora de início:</label>
+                <input type="time" name="hora_inicio" class="form-control" required>
+            </div>
 
-        <label>
-            <input type="checkbox" name="usa_luz"> Iluminação noturna
-        </label><br><br>
+            <div class="mb-3">
+                <label class="form-label">Hora de fim:</label>
+                <input type="time" name="hora_fim" class="form-control" required>
+            </div>
 
-        <label>Quantidade de material (raquetes/bolas):</label><br>
-        <input type="number" name="qtd_material" value="0" min="0"><br><br>
+            <div class="mb-3 form-check">
+                <input type="checkbox" name="usa_luz" class="form-check-input" id="luz">
+                <label class="form-check-label" for="luz">Iluminação noturna</label>
+            </div>
 
-        <button type="submit">Confirmar Reserva</button>
-    </form>
-    <script>
-        // Lê o parâmetro "tipo" do URL 
-        const params = new URLSearchParams(window.location.search);
-        const tipo = params.get('tipo');
+            <div class="mb-3">
+                <label class="form-label">Quantidade de material (raquetes/bolas):</label>
+                <input type="number" name="qtd_material" value="0" min="0" class="form-control">
+            </div>
 
-        // Mostra o tipo ao utilizador e mete-o no campo escondido do formulário
-        document.getElementById('tipo-campo').textContent = tipo;
-        document.getElementById('input-tipo').value = tipo;
-    </script>
+            <button type="submit" class="btn btn-success">Confirmar Reserva</button>
+        </form>
+
+        <script>
+            // Lê o parâmetro "tipo" do URL 
+            const params = new URLSearchParams(window.location.search);
+            const tipo = params.get('tipo');
+
+            // Mostra o tipo ao utilizador e mete-o no campo escondido do formulário
+            document.getElementById('tipo-campo').textContent = formatarTipo(tipo);
+            document.getElementById('input-tipo').value = tipo;
+
+            function formatarTipo(t) {
+                return t.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            }
+        </script>
+    </div>
 </body>
 
 </html>
