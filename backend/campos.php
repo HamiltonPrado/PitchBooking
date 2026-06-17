@@ -23,3 +23,25 @@ while ($campo = mysqli_fetch_assoc($resultado)) {
 echo json_encode($campos);
 
 }
+
+else if ($acao == 'listar_todos') {
+
+    // Só gestor pode ver e gerir os campos fisicos
+    if ($_SESSION['role'] != 'gestor') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    // Lista todos os campos fisicos individuais
+    $resultado = mysqli_query($ligacao,
+        "SELECT id, identificador, tipo_campo, descricao, estado, preco_base, custo_luz, custo_material
+         FROM campo
+         ORDER BY identificador");
+
+    $campos = [];
+    while ($campo = mysqli_fetch_assoc($resultado)) {
+        $campos[] = $campo;
+    }
+
+    echo json_encode($campos);
+}
