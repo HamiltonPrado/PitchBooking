@@ -30,6 +30,9 @@
     <h2 id="atletas">Gestão de Atletas</h2>
     <div id="lista-atletas"></div>
 
+    <h2 id="campos">Gestão de Campos</h2>
+    <div id="seccao-campos"></div>
+
     <script>
         fetch('../backend/user.php')
             .then(res => res.json())
@@ -63,6 +66,9 @@
                 // Carrega as reservas do clube
                 carregarReservas();
                 carregarAtletas();
+                if (role === 'gestor') {
+                    carregarCampos();
+                }
 
             })
             .catch(err => {
@@ -185,6 +191,72 @@
                 })
                 .then(res => res.json())
                 .then(() => carregarAtletas());
+        }
+
+        function carregarCampos() {
+            fetch('../backend/campos.php?acao=listar_todos')
+                .then(res => res.json())
+                .then(campos => {
+                    const div = document.getElementById('seccao-campos');
+                    let html = '<table border="1"><tr><th>ID</th><th>Identificador</th><th>Tipo</th><th>Preço</th><th>Luz</th><th>Material</th><th>Estado</th><th>Ações</th></tr>';
+                    campos.forEach(c => {
+                        html += `<tr>
+                            <td>${c.id}</td>
+                            <td>${c.identificador}</td>
+                            <td>${c.tipo_campo}</td>
+                            <td>${c.preco_base}€</td>
+                            <td>${c.custo_luz}€</td>
+                            <td>${c.custo_material}€</td>
+                            <td>${c.estado}</td>
+                            <td><button onclick="apagarCampo(${c.id})">Apagar</button></td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    html += `
+                        <h3>Adicionar Campo</h3>
+                        <input id="c-id" placeholder="Identificador (ex: PAD-04)">
+                        <select id="c-tipo">
+                            <option value="padel_coberto">Pádel Coberto</option>
+                            <option value="padel_descoberto">Pádel Descoberto</option>
+                            <option value="tenis_terra">Ténis Terra</option>
+                            <option value="tenis_rapido">Ténis Rápido</option>
+                        </select>
+                        <input id="c-desc" placeholder="Descrição">
+                        <input id="c-preco" type="number" step="0.01" placeholder="Preço base">
+                        <input id="c-luz" type="number" step="0.01" placeholder="Custo luz">
+                        <input id="c-material" type="number" step="0.01" placeholder="Custo material">
+                        <button onclick="criarCampo()">Criar</button>`;
+                    div.innerHTML = html;
+                });
+        }
+
+        function apagarCampo(id) {
+            const dados = new FormData();
+            dados.append('acao', 'apagar');
+            dados.append('id', id);
+            fetch('../backend/campos.php', {
+                    method: 'POST',
+                    body: dados
+                })
+                .then(res => res.json())
+                .then(() => carregarCampos());
+        }
+
+        function criarCampo() {
+            const dados = new FormData();
+            dados.append('acao', 'criar');
+            dados.append('identificador', document.getElementById('c-id').value);
+            dados.append('tipo_campo', document.getElementById('c-tipo').value);
+            dados.append('descricao', document.getElementById('c-desc').value);
+            dados.append('preco_base', document.getElementById('c-preco').value);
+            dados.append('custo_luz', document.getElementById('c-luz').value);
+            dados.append('custo_material', document.getElementById('c-material').value);
+            fetch('../backend/campos.php', {
+                    method: 'POST',
+                    body: dados
+                })
+                .then(res => res.json())
+                .then(() => carregarCampos());
         }
     </script>
 </body>
