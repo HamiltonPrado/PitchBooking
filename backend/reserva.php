@@ -140,3 +140,48 @@ else if ($acao == 'checkin') {
     echo 'Check-in efetuado.';
 
 }
+
+else if ($acao == 'relatorios') {
+
+    header('Content-Type: application/json');
+
+    // Só staff pode ver relatorios
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    // 1. Estado das reservas (quantas ativas / canceladas)
+    $estado = mysqli_query($ligacao,
+        "SELECT estado, COUNT(*) AS total FROM reserva GROUP BY estado");
+    $por_estado = [];
+    while ($linha = mysqli_fetch_assoc($estado)) {
+        $por_estado[] = $linha;
+    }
+
+    // 2. Receita por modalidade (soma dos pagamentos por tipo de campo)
+    $receita = mysqli_query($ligacao,
+        "SELECT c.tipo_campo, SUM(p.montante) AS total
+         FROM pagamento p
+         JOIN reserva r ON r.id = p.reserva_id
+         JOIN campo c ON c.id = r.campo_id
+         GROUP BY c.tipo_campo");
+    $por_modalidade = [];
+    while ($linha = mysqli_fetch_assoc($receita)) {
+        $por_modalidade[] = $linha;
+    }
+
+    // 3. Taxa de ocupacao (reservas ativas vs total de campos)
+    $total_campos = mysqli_fetch_assoc(mysqli_query($ligacao,
+        "SELECT COUNT(*) AS n FROM campo"))['n'];
+    $reservas_ativas = mysqli_fetch_assoc(mysqli_query($ligacao,
+        "SELECT COUNT(*) AS n FROM reserva WHERE estado = 'ativa'"))['n'];
+
+    // Devolve os tres relatorios num so JSON
+    echo json_encode([
+        "por_estado" => $por_estado,
+        "por_modalidade" => $por_modalidade,
+        "total_campos" => $total_campos,
+        "reservas_ativas" => $reservas_ativas
+    ]);
+}
