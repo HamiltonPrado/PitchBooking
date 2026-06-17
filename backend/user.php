@@ -67,3 +67,39 @@ else if ($acao == 'listar_atletas') {
 
     echo json_encode($atletas);
 }
+
+else if ($acao == 'verificar_docs') {
+
+    // Só staff pode verificar documentos
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    $alvo_id = $_POST['atleta_id'];
+
+    $stmt = mysqli_prepare($ligacao,
+        "UPDATE atleta SET docs_verificados = 1 WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $alvo_id);
+    mysqli_stmt_execute($stmt);
+
+    echo json_encode(['ok' => 'Documentos verificados']);
+}
+else if ($acao == 'alterar_estado') {
+
+    // Só staff pode ativar/inativar atletas
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    $alvo_id = $_POST['atleta_id'];
+    $novo_estado = $_POST['estado'];
+
+    $stmt = mysqli_prepare($ligacao,
+        "UPDATE atleta SET estado = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "si", $novo_estado, $alvo_id);
+    mysqli_stmt_execute($stmt);
+
+    echo json_encode(['ok' => 'Estado alterado']);
+}
