@@ -4,40 +4,50 @@
 <head>
     <meta charset="utf-8">
     <title>Backoffice - PitchBooking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
-    <h1>Administração</h1>
-    <nav>
-        <a href="../backend/logout.php">Terminar sessão</a>
-    </nav>
-    <p>Perfil: <strong><span id="perfil"></span></strong></p>
+    <div class="container my-5">
+        <h1>Administração</h1>
+        <nav class="mb-3">
+            <a href="../backend/logout.php">Terminar sessão</a>
+        </nav>
+        <p>Perfil: <strong><span id="perfil"></span></strong></p>
 
-    <div id="menu"></div>
-    <h2 id="reservas">Reservas do Clube</h2>
-    <div id="lista-reservas-bo"></div>
-    <h2 id="pagamentos">Registar Pagamento</h2>
-    <div>
-        <label>ID da Reserva:</label>
-        <input type="number" id="pag-reserva">
-        <label>Montante:</label>
-        <input type="number" id="pag-montante" step="0.01">
-        <label>Tipo:</label>
-        <select id="pag-tipo">
+        <div id="menu"></div>
+        <h2 id="reservas">Reservas do Clube</h2>
+        <div id="lista-reservas-bo"></div>
+        <h2 id="pagamentos">Registar Pagamento</h2>
+        <div>
+            <label>ID da Reserva:</label>
+            <input type="number" id="pag-reserva">
+            <label>Montante:</label>
+            <input type="number" id="pag-montante" step="0.01">
+            <label>Tipo:</label>
+            <select id="pag-tipo">
             <option value="total">Total</option>
             <option value="parcial">Parcial</option>
         </select>
-        <button onclick="registarPagamento()">Registar</button>
-        <span id="pag-msg"></span>
+            <button onclick="registarPagamento()">Registar</button>
+            <span id="pag-msg"></span>
+        </div>
+
+        <h2 id="atletas">Gestão de Atletas</h2>
+        <div id="lista-atletas"></div>
+
+        <div id="bloco-campos" style="display:none">
+            <h2 id="campos">Gestão de Campos</h2>
+            <div id="seccao-campos"></div>
+        </div>
+
+        <h2 id="relatorios">Relatórios</h2>
+        <div id="seccao-relatorios"></div>
+
     </div>
-    <h2 id="atletas">Gestão de Atletas</h2>
-    <div id="lista-atletas"></div>
-
-    <h2 id="campos">Gestão de Campos</h2>
-    <div id="seccao-campos"></div>
-
-    <h2 id="relatorios">Relatórios</h2>
-    <div id="seccao-relatorios"></div>
 
     <script>
         fetch('../backend/user.php')
@@ -74,6 +84,7 @@
                 carregarAtletas();
                 carregarRelatorios();
                 if (role === 'gestor') {
+                    document.getElementById('bloco-campos').style.display = 'block';
                     carregarCampos();
                 }
 
@@ -93,9 +104,10 @@
                         div.innerHTML = '<p>Não há reservas.</p>';
                         return;
                     }
-                    let html = '<table border="1"><tr><th>Atleta</th><th>Campo</th><th>Data</th><th>Hora</th><th>Total</th><th>Estado</th><th>Check-in</th><th>Ações</th></tr>';
+                    let html = '<table class="table table-bordered"><tr><th>ID</th><th>Atleta</th><th>Campo</th><th>Data</th><th>Hora</th><th>Total</th><th>Estado</th><th>Check-in</th><th>Ações</th></tr>';
                     reservas.forEach(r => {
                         html += `<tr>
+                             <td>${r.id}</td>
                             <td>${r.atleta}</td>
                             <td>${formatarTipo(r.tipo_campo)} (${r.identificador})</td>
                             <td>${r.data_jogo}</td>
@@ -158,7 +170,7 @@
                 .then(res => res.json())
                 .then(atletas => {
                     const div = document.getElementById('lista-atletas');
-                    let html = '<table border="1"><tr><th>Nome</th><th>Email</th><th>Documento</th><th>Estado</th><th>Docs</th><th>Ações</th></tr>';
+                    let html = '<table class="table table-bordered"><tr><th>Nome</th><th>Email</th><th>Documento</th><th>Estado</th><th>Docs</th><th>Ações</th></tr>';
                     atletas.forEach(a => {
                         html += `<tr>
                             <td>${a.nome}</td>
@@ -207,7 +219,7 @@
                 .then(res => res.json())
                 .then(campos => {
                     const div = document.getElementById('seccao-campos');
-                    let html = '<table border="1"><tr><th>ID</th><th>Identificador</th><th>Tipo</th><th>Preço</th><th>Luz</th><th>Material</th><th>Estado</th><th>Ações</th></tr>';
+                    let html = '<table class="table table-bordered"><tr><th>ID</th><th>Identificador</th><th>Tipo</th><th>Preço</th><th>Luz</th><th>Material</th><th>Estado</th><th>Ações</th></tr>';
                     campos.forEach(c => {
                         html += `<tr>
                             <td>${c.id}</td>
