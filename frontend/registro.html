@@ -11,35 +11,50 @@
 </head>
 
 <body>
-    <h2>Criar conta</h2>
+    <div class="container my-5">
+        <h2>Criar conta</h2>
 
-    <form action="../backend/registro.php" method="post">
-        <label>Nome:</label><br>
-        <input type="text" name="nome" required><br><br>
+        <form action="../backend/registro.php" method="post">
+            <div class="mb-3">
+                <label class="form-label">Nome:</label>
+                <input type="text" name="nome" class="form-control" required>
+            </div>
 
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+            <div class="mb-3">
+                <label class="form-label">Password:</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
 
-        <label>Tipo de documento:</label><br>
-        <select name="tipo_doc">
+            <div class="mb-3">
+                <label class="form-label">Tipo de documento:</label>
+                <select name="tipo_doc" class="form-select">
             <option value="cc">Cartão de Cidadão</option>
             <option value="passaporte">Passaporte</option>
             <option value="outro">Outro</option>
-        </select><br><br>
+        </select>
+            </div>
 
-        <label>Nº do documento:</label><br>
-        <input type="text" name="num_doc" required><br><br>
+            <div class="mb-3">
+                <label class="form-label">Nº do documento:</label>
+                <input type="text" name="num_doc" class="form-control" required>
+            </div>
 
-        <label>NIF (opcional):</label><br>
-        <input type="text" name="nif"><br><br>
+            <div class="mb-3">
+                <label class="form-label">NIF (opcional):</label>
+                <input type="text" name="nif" class="form-control">
+            </div>
 
-        <button type="submit">Registar</button>
-    </form>
-    <p>Já tem conta? <a href="login.html">Entre aqui</a></p>
-    <p><a href="index.html">Voltar ao início</a></p>
+            <button type="submit" class="btn btn-success">Registar</button>
+
+        </form>
+        <p>Já tem conta? <a href="login.html">Entre aqui</a></p>
+        <p><a href="index.html">Voltar ao início</a></p>
+    </div>
 </body>
 
 </html>
