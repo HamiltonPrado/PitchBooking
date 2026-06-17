@@ -44,3 +44,26 @@ echo json_encode([
     "reservas" => $reservas
 ]);
 }
+
+else if ($acao == 'listar_atletas') {
+
+    // Só staff pode listar atletas
+    if ($_SESSION['role'] != 'gestor' && $_SESSION['role'] != 'rececionista') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    // Lista todos os atletas (clientes)
+    $resultado = mysqli_query($ligacao,
+    "SELECT id, nome, email, tipo_doc, num_doc, nif, estado, docs_verificados, role
+     FROM atleta
+     WHERE role = 'cliente'
+     ORDER BY nome");
+
+    $atletas = [];
+    while ($linha = mysqli_fetch_assoc($resultado)) {
+        $atletas[] = $linha;
+    }
+
+    echo json_encode($atletas);
+}
