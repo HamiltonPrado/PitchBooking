@@ -1,6 +1,11 @@
 <?php
+session_start();
 require 'db.php';
 header('Content-Type: application/json');
+
+$acao = $_POST['acao'] ?? $_GET['acao'] ?? 'listar';
+
+if ($acao == 'listar') {
 
 // Vai buscar os tipos de campo disponiveis e o preco
 $resultado = mysqli_query($ligacao,
@@ -16,3 +21,5 @@ while ($campo = mysqli_fetch_assoc($resultado)) {
 }
 
 echo json_encode($campos);
+
+}
