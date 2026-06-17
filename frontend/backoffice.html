@@ -33,6 +33,9 @@
     <h2 id="campos">Gestão de Campos</h2>
     <div id="seccao-campos"></div>
 
+    <h2 id="relatorios">Relatórios</h2>
+    <div id="seccao-relatorios"></div>
+
     <script>
         fetch('../backend/user.php')
             .then(res => res.json())
@@ -66,9 +69,12 @@
                 // Carrega as reservas do clube
                 carregarReservas();
                 carregarAtletas();
+                carregarRelatorios();
                 if (role === 'gestor') {
                     carregarCampos();
                 }
+
+
 
             })
             .catch(err => {
@@ -88,7 +94,7 @@
                     reservas.forEach(r => {
                         html += `<tr>
                             <td>${r.atleta}</td>
-                            <td>${r.tipo_campo} (${r.identificador})</td>
+                            <td>${formatarTipo(r.tipo_campo)} (${r.identificador})</td>
                             <td>${r.data_jogo}</td>
                             <td>${r.hora_inicio} - ${r.hora_fim}</td>
                             <td>${r.valor_total}€</td>
@@ -203,7 +209,7 @@
                         html += `<tr>
                             <td>${c.id}</td>
                             <td>${c.identificador}</td>
-                            <td>${c.tipo_campo}</td>
+                            <td>${formatarTipo(c.tipo_campo)}</td>
                             <td>${c.preco_base}€</td>
                             <td>${c.custo_luz}€</td>
                             <td>${c.custo_material}€</td>
@@ -257,6 +263,46 @@
                 })
                 .then(res => res.json())
                 .then(() => carregarCampos());
+        }
+
+        function carregarRelatorios() {
+            fetch('../backend/reserva.php?acao=relatorios')
+                .then(res => res.json())
+                .then(rel => {
+                    const div = document.getElementById('seccao-relatorios');
+                    let html = '';
+
+                    // Taxa de ocupação
+                    const ocupacao = rel.total_campos > 0 ?
+                        Math.round((rel.reservas_ativas / rel.total_campos) * 100) :
+                        0;
+                    html += `<h3>Taxa de Ocupação</h3>
+                        <p>${rel.reservas_ativas} reservas ativas em ${rel.total_campos} campos (${ocupacao}%)</p>`;
+
+                    // Estado das reservas
+                    html += '<h3>Estado das Reservas</h3><ul>';
+                    rel.por_estado.forEach(e => {
+                        html += `<li>${e.estado}: ${e.total}</li>`;
+                    });
+                    html += '</ul>';
+
+                    // Receita por modalidade
+                    html += '<h3>Receita por Modalidade</h3><ul>';
+                    if (rel.por_modalidade.length === 0) {
+                        html += '<li>Sem pagamentos registados.</li>';
+                    } else {
+                        rel.por_modalidade.forEach(m => {
+                            html += `<li>${formatarTipo(m.tipo_campo)}: ${m.total}€</li>`;
+                        });
+                    }
+                    html += '</ul>';
+
+                    div.innerHTML = html;
+                });
+        }
+
+        function formatarTipo(t) {
+            return t.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
     </script>
 </body>
