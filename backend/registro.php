@@ -23,5 +23,6 @@ $stmt = mysqli_prepare($ligacao,
 mysqli_stmt_bind_param($stmt, "ssssss", $nome, $email, $hash, $tipo_doc, $num_doc, $nif);
 mysqli_stmt_execute($stmt);
 
-echo 'Conta criada com sucesso!';
+header('Location: ../frontend/login.html');
+exit;
 
