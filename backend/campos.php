@@ -45,3 +45,66 @@ else if ($acao == 'listar_todos') {
 
     echo json_encode($campos);
 }
+
+else if ($acao == 'criar') {
+
+    // Só gestor pode criar campos
+    if ($_SESSION['role'] != 'gestor') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    $identificador = $_POST['identificador'];
+    $tipo_campo = $_POST['tipo_campo'];
+    $descricao = $_POST['descricao'];
+    $preco_base = $_POST['preco_base'];
+    $custo_luz = $_POST['custo_luz'];
+    $custo_material = $_POST['custo_material'];
+
+    $stmt = mysqli_prepare($ligacao,
+        "INSERT INTO campo (identificador, tipo_campo, descricao, preco_base, custo_luz, custo_material)
+         VALUES (?, ?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "sssddd",
+        $identificador, $tipo_campo, $descricao, $preco_base, $custo_luz, $custo_material);
+    mysqli_stmt_execute($stmt);
+
+    echo json_encode(['ok' => 'Campo criado']);
+}
+else if ($acao == 'editar') {
+
+    // Só gestor pode editar campos
+    if ($_SESSION['role'] != 'gestor') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    $id = $_POST['id'];
+    $preco_base = $_POST['preco_base'];
+    $custo_luz = $_POST['custo_luz'];
+    $custo_material = $_POST['custo_material'];
+    $estado = $_POST['estado'];
+
+    $stmt = mysqli_prepare($ligacao,
+        "UPDATE campo SET preco_base = ?, custo_luz = ?, custo_material = ?, estado = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "dddsi",
+        $preco_base, $custo_luz, $custo_material, $estado, $id);
+    mysqli_stmt_execute($stmt);
+
+    echo json_encode(['ok' => 'Campo atualizado']);
+}
+else if ($acao == 'apagar') {
+
+    // Só gestor pode apagar campos
+    if ($_SESSION['role'] != 'gestor') {
+        echo json_encode(['erro' => 'Sem permissão']);
+        exit;
+    }
+
+    $id = $_POST['id'];
+
+    $stmt = mysqli_prepare($ligacao, "DELETE FROM campo WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+
+    echo json_encode(['ok' => 'Campo apagado']);
+}
