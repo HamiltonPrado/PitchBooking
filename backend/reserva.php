@@ -17,6 +17,17 @@ $hora_fim = $_POST['hora_fim'];
 $usa_luz = isset($_POST['usa_luz']) ? 1 : 0;
 $qtd_material = $_POST['qtd_material'];
 
+ // Validação: hora de fim tem de ser depois da hora de início
+    if ($hora_fim <= $hora_inicio) {
+        die('A hora de fim tem de ser depois da hora de início.');
+    }
+
+    // Validação: não permitir reservas em datas/horas passadas
+    $data_hora_reserva = $data_jogo . ' ' . $hora_inicio;
+    if (strtotime($data_hora_reserva) < time()) {
+        die('Não é possível reservar para uma data ou hora que já passou.');
+    }
+
 // Encontra um campo desse tipo que esteja livre no horario pedido
 $stmt = mysqli_prepare($ligacao,
     "SELECT id FROM campo
