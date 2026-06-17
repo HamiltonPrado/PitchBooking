@@ -7,6 +7,10 @@ if (!isset($_SESSION['atleta_id'])) {
 require 'db.php';
 header('Content-Type: application/json');
 
+$acao = $_POST['acao'] ?? $_GET['acao'] ?? 'perfil';
+
+if ($acao == 'perfil') {
+
 $atleta_id = $_SESSION['atleta_id'];
 
 // Vai buscar os dados do atleta e o estado dos documentos
@@ -39,3 +43,4 @@ echo json_encode([
     "dados" => $dados,
     "reservas" => $reservas
 ]);
+}
