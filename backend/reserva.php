@@ -62,7 +62,8 @@ mysqli_stmt_bind_param($stmt, "iisssiid",
     $atleta_id, $campo_id, $data_jogo, $hora_inicio, $hora_fim, $usa_luz, $qtd_material, $valor_total);
 mysqli_stmt_execute($stmt);
 
-echo 'Reserva criada com sucesso!'; 
+header('Location: ../frontend/perfil.html');
+exit;
 }
 
 else if ($acao == 'listar') {
