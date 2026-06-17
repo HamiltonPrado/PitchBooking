@@ -21,7 +21,7 @@ Aplicação web para a gestão integral de um clube desportivo. Permite que atle
 - **PHP** — backend e ligação à base de dados (com prepared statements)
 - **MySQL** — base de dados relacional
 - **Apache (MAMP)** — servidor local
-- **Bootstrap** — ícones
+- **Bootstrap** — framework CSS para o layout e componentes
 - **Google Fonts** — tipografia
 
 ## Instalação
